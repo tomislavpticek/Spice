@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
-<body>
+<body class="search-background">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
             <div class="container">
@@ -24,7 +24,7 @@
                                 Content management
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropDownMenu">
-                                <a class="dropdown-item">Category</a>
+                                <a class="dropdown-item" asp-action="Index" asp-controller="Category" asp-area="Admin">Category</a>
                                 <a class="dropdown-item">Sub Category</a>
                                 <a class="dropdown-item">Menu Item</a>
                                 <a class="dropdown-item">Cupons</a>
@@ -50,9 +50,10 @@
 
     <footer class="border-top footer p-3 text-white-50 text-muted" style="background-color:#212529">
         <div class="container">
-            &copy; 2020 - Spice 
+            &copy; 2020 - Spice
         </div>
     </footer>
+    <script src="https://kit.fontawesome.com/4d44765fdc.js" crossorigin="anonymous"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
