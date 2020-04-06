@@ -1,0 +1,53 @@
+﻿@model Spice.Models.ViewModels.SubCategoryAndCategoryViewModel
+@using Spice.Extensions
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<h1 class="text-info">Create Sub Category</h1>
+<br />
+<div class="border backgroungWhite row">
+
+    <div class="col-8 border-right">
+        <form method="post" asp-action="Create">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="row form-group">
+                <div class="col-2">
+                    <label asp-for="SubCategory.CategoryId" class="col-form-label"></label>
+                </div>
+                <div class="col-5">
+                    <select id="subCategorySelectList" asp-for="SubCategory.CategoryId" asp-items="Model.CategoryList.ToSelectListItem(Model.SubCategory.CategoryId)" class="form-control"> </select>
+                </div>
+
+            </div>
+            <div class="row form-group">
+                <div class="col-2">
+                    <label asp-for="SubCategory.Name" class="col-form-label"></label>
+                </div>
+                <div class="col-5">
+                    <input asp-for="SubCategory.Name" class="form-control" />
+                </div>
+                <span asp-validation-for="SubCategory.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group row">
+                <div class="col-5 offset-2">
+                    <partial name="_CreateAndBackToListPartial" />
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="col-3 offset-1">
+        @if(Model.SubCategoryList.Count() > 0)
+        {
+            <p>Existing Sub Categories</p>
+        }
+    </div>
+
+
+</div>
