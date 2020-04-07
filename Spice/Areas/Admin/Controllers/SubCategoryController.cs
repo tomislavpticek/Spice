@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Spice.Data;
+using Spice.Models;
 using Spice.Models.ViewModels;
 
 namespace Spice.Areas.Admin.Controllers
@@ -76,6 +78,19 @@ namespace Spice.Areas.Admin.Controllers
             };
 
             return View(newModel);
+        }
+
+        //GET - LIST OF SUBCATEGORIES
+
+        [ActionName("GetSubcategory")]
+        public async Task<IActionResult> GetSubcategory(int id) 
+        {
+            List<SubCategory> Subcategories = new List<SubCategory>();
+            Subcategories = await (from SubCategory in _db.SubCategory
+                                   where SubCategory.CategoryId == id
+                                   select SubCategory).ToListAsync();
+
+            return Json(new SelectList(Subcategories, "Id", "Name"));
         }
     }
 }
