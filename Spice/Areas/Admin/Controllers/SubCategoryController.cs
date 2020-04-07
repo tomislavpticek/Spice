@@ -15,6 +15,9 @@ namespace Spice.Areas.Admin.Controllers
 
         private readonly ApplicationDbContext _db;
 
+        [TempData]
+        public string StatusMessage { get; set; }
+
         public SubCategoryController(ApplicationDbContext db)
         {
             _db = db;
@@ -55,6 +58,7 @@ namespace Spice.Areas.Admin.Controllers
                 if (checkIfSubCategoryExists.Count() > 0)
                 {
                     //error
+                    StatusMessage = "Error : This subcategory already exists under " + checkIfSubCategoryExists.First().category.Name + " category. Please use a different name for the subcategory.";
                 }
                 else
                 {
@@ -62,15 +66,13 @@ namespace Spice.Areas.Admin.Controllers
                     await _db.SaveChangesAsync();
                     return RedirectToAction("Index");
                 }
-
-
-
             }
             SubCategoryAndCategoryViewModel newModel = new SubCategoryAndCategoryViewModel()
             {
                 CategoryList = await _db.Category.ToListAsync(),
                 SubCategory = model.SubCategory,
-                SubCategoryList = await _db.SubCategory.OrderBy(p => p.Name).Select(p => p.Name).ToListAsync()
+                SubCategoryList = await _db.SubCategory.OrderBy(p => p.Name).Select(p => p.Name).ToListAsync(), 
+                StatusMessage = StatusMessage
             };
 
             return View(newModel);
