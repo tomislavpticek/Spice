@@ -80,6 +80,67 @@ namespace Spice.Areas.Admin.Controllers
             return View(newModel);
         }
 
+        //GET - EDIT
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == 0)
+            {
+                return NotFound();
+            }
+
+            var subcategory = await _db.SubCategory.SingleOrDefaultAsync(k => k.Id == id);
+            if (subcategory == null)
+            {
+
+                return NotFound();
+            }
+
+
+            SubCategoryAndCategoryViewModel model = new SubCategoryAndCategoryViewModel()
+            {
+                CategoryList = await _db.Category.ToListAsync(),
+                SubCategory = subcategory,
+                SubCategoryList = await _db.SubCategory.OrderBy(k => k.Name).Select(l => l.Name).ToListAsync()
+            };
+            return View(model);
+
+        }
+
+        //POST - EDIT
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit (int id, SubCategoryAndCategoryViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var checkIfSubCategoryExists = _db.SubCategory.Include(j => j.category).Where(j => j.Name == model.SubCategory.Name && j.category.Id == model.SubCategory.CategoryId);
+
+                if (checkIfSubCategoryExists.Count() > 0)
+                {
+                    //error
+                    StatusMessage = "Error : This subcategory already exists under " + checkIfSubCategoryExists.First().category.Name + " category. Please use a different name for the subcategory.";
+                }
+                else
+                {
+                    _db.SubCategory.Add(model.SubCategory);
+                    await _db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+            }
+            SubCategoryAndCategoryViewModel newModel = new SubCategoryAndCategoryViewModel()
+            {
+                CategoryList = await _db.Category.ToListAsync(),
+                SubCategory = model.SubCategory,
+                SubCategoryList = await _db.SubCategory.OrderBy(p => p.Name).Select(p => p.Name).ToListAsync(),
+                StatusMessage = StatusMessage
+            };
+
+            return View(newModel);
+        }
+
+
         //GET - LIST OF SUBCATEGORIES
 
         [ActionName("GetSubcategory")]
