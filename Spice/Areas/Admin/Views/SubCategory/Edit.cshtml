@@ -2,21 +2,21 @@
 @using Spice.Extensions
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <br />
 
 
-<h1 class="text-info">Create Sub Category</h1>
+<h1 class="text-info">Eidt Sub Category</h1>
 <br />
 <partial name="_StatusMessage" model="Model.StatusMessage" />
 <div class="border backgroungWhite row">
 
     <div class="col-8 border-right">
-        <form method="post" asp-action="Create">
-
+        <form method="post" asp-action="Edit">
+            <input type="hidden" asp-for="SubCategory.CategoryId" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="row form-group">
@@ -24,7 +24,7 @@
                     <label asp-for="SubCategory.CategoryId" class="col-form-label"></label>
                 </div>
                 <div class="col-5">
-                    <select id="subCategorySelectList" asp-for="SubCategory.CategoryId" asp-items="Model.CategoryList.ToSelectListItem(Model.SubCategory.CategoryId)" class="form-control"> </select>
+                    <select id="subCategorySelectList" asp-for="SubCategory.CategoryId" disabled asp-items="Model.CategoryList.ToSelectListItem(Model.SubCategory.CategoryId)" class="form-control"> </select>
                 </div>
 
             </div>
@@ -39,7 +39,7 @@
             </div>
             <div class="form-group row">
                 <div class="col-5 offset-2">
-                    <partial name="_CreateAndBackToListPartial" />
+                    <partial name="_EditAndBackToListPartial" model="Model.SubCategory.Id" />
                 </div>
             </div>
 
@@ -62,35 +62,33 @@
 @section Scripts{
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
-    <script>
-        function updateSubCategoryList() {
-            var categorySelected = document.getElementById("subCategorySelectList").value;
+<script>
+    function updateSubCategoryList() {
+        var categorySelected = document.getElementById("subCategorySelectList").value;
 
-            $list = $('#SubCategoryList');
+        $list = $('#SubCategoryList');
 
-            $.ajax({
-                url: '/Admin/SubCategory/GetSubcategory/' + categorySelected,
-                type: 'GET',
-                dataType: 'text',
-                success: function (data) {
-                    result = JSON.parse(data);
-                    $list.html('');
-                    $list.append('<ul class="list-group">')
-                    for (i in result) {
-                        $list.append('<li class="list-group-item">' + result[i].text + '</li>');
+        $.ajax({
+            url: '/Admin/SubCategory/GetSubcategory/' + categorySelected,
+            type: 'GET',
+            dataType: 'text',
+            success: function (data) {
+                result = JSON.parse(data);
+                $list.html('');
+                $list.append('<ul class="list-group">')
+                for (i in result) {
+                    $list.append('<li class="list-group-item">' + result[i].text + '</li>');
 
-                    }
-                    $list.append('</ul>');
                 }
-            });
+                $list.append('</ul>');
+            }
+        });
 
 
-        }
+    }
 
 
-        $(document).ready(function () { updateSubCategoryList(); });
-
-        $('#subCategorySelectList').on('change', function () { updateSubCategoryList(); });
-    </script>
+    $(document).ready(function () { updateSubCategoryList(); });
+</script>
 
 }
